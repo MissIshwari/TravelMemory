@@ -1,0 +1,30 @@
+name:  Frontend deployment
+on:
+  push:
+    branches:
+      -  frontend
+
+jobs:
+  deploy:
+    runs-on:  ubuntu-latest
+    steps:
+      -  name:  Checkout code
+         uses:  actions/checkout@v4
+
+      -  name:  Login and Update EC2
+         uses:  appleboy/ssh-action@v1.0.3
+         with:
+           host:  52.54.64.249
+           username:  ${{secrets.USERNAME}}
+           key:  ${{secrets.KEY}}
+           port:  22
+           script:  |
+             pwd
+             whoami
+             sudo apt-get update -y
+             sudo apt-get install nginx -y
+             sudo chmod -R 755 /etc/nginx
+             
+
+      
+             
