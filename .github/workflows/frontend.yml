@@ -24,6 +24,17 @@ jobs:
              sudo apt-get update -y
              sudo apt-get install nginx -y
              sudo chmod -R 755 /etc/nginx
+
+      -  name:  Copy code on EC2 instance
+         uses:  appleboy/scp-action@v0.1.7
+         with:
+           host:  ${{secrets.FRONTEND_STAGING_EC2}}
+           username:  ${{secrets.USERNAME}}
+           key:  ${{secrets.KEY}}
+           port:  22
+           source:  ./
+           target:  ./
+         
              
 
       
