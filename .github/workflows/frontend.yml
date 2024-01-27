@@ -58,7 +58,7 @@ jobs:
 
       - name: Start frontend server and restart nginx
         uses: appleboy/ssh-action@v1.0.3
-         with:
+        with:
           host:  ${{secrets.FRONTEND_STAGING_EC2}}
           username:  ${{secrets.USERNAME}}
           key:  ${{secrets.KEY}}
