@@ -53,7 +53,7 @@ jobs:
             npm install
 
       - name: Overwrite url.js for backend staging environment
-        uses: "DamianReeves/write-file-action@master"
+        uses: DamianReeves/write-file-action@master
         with:
           path: ./frontend/src/url.js
           write-mode: overwrite
