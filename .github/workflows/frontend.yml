@@ -1,0 +1,78 @@
+name:  Frontend deployment
+on:
+  pull_request:
+    branches:
+      -  frontend-staging
+
+jobs:
+  deploy:
+    runs-on:  ubuntu-latest
+    steps:
+      - name:  Checkout code
+        uses:  actions/checkout@v4
+
+      - name:  Login and Update EC2
+        uses:  appleboy/ssh-action@v1.0.3
+        with:
+          host:  ${{secrets.FRONTEND_STAGING_EC2}}
+          username:  ${{secrets.USERNAME}}
+          key:  ${{secrets.KEY}}
+          port:  22
+          script:  |
+            pwd
+            whoami
+            sudo apt-get update -y
+            sudo apt-get install nginx -y
+            sudo chmod -R 755 /etc/nginx
+            sudo mv default /etc/nginx/sites-enabled
+
+      - name: Copy code on EC2 instance
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{secrets.FRONTEND_STAGING_EC2}}
+          username: ${{secrets.USERNAME}}
+          key:  ${{secrets.KEY}}
+          port: 22
+          source: ./
+          target: ./
+
+      - name: Install node module packages on Frontend staging environment
+        uses:  appleboy/ssh-action@v1.0.3
+        with:
+          host:  ${{secrets.FRONTEND_STAGING_EC2}}
+          username:  ${{secrets.USERNAME}}
+          key:  ${{secrets.KEY}}
+          port:  22
+          script:  |
+            cd frontend
+            npm install
+
+      - name: Overwrite url.js for backend staging environment
+        uses: "DamianReeves/write-file-action@master"
+        with:
+          path: ./frontend/src/url.js
+          write-mode: overwrite
+          contents: |
+            export const baseUrl = ${{secrets.BACKEND_STAGING_EC2}}
+
+
+      - name: Start frontend server and restart nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host:  ${{secrets.FRONTEND_STAGING_EC2}}
+          username:  ${{secrets.USERNAME}}
+          key:  ${{secrets.KEY}}
+          port:  22
+          script:  |
+            cd frontend
+            npm start &
+            sudo systemctl start nginx
+            sudo systemctl status nginx
+
+            
+
+         
+             
+
+      
+             
