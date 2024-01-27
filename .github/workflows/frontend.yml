@@ -1,6 +1,6 @@
 name:  Frontend deployment
 on:
-  push:
+  pull_request:
     branches:
       -  frontend-staging
 
