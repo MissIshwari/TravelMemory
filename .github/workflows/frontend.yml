@@ -4,6 +4,11 @@ on:
     branches:
       -  frontend-staging
 
+  push:
+    branches:
+      -  frontend-staging
+
+
 jobs:
   deploy:
     runs-on:  ubuntu-latest
