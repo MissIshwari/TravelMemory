@@ -7,6 +7,11 @@ MONGO_URI='ENTER_YOUR_URL'
 PORT=3000
 ```
 
+`.env` file for frontend code to connect to backend base url
+```
+REACT_APP_BACKEND='backend url'
+```
+
 Data format to be added: 
 
 ```json
