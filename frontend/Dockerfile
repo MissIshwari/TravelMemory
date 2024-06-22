@@ -1,14 +1,20 @@
-FROM node:18 as tmfrontend
+# Use an official Node runtime as a parent image
+FROM node:18
+
+# Set the working directory to /app
 WORKDIR /app
-COPY . .
+
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
-RUN npm run build
 
-FROM nginx:alpine
-COPY --from=tmfrontend /app/build /usr/share/nginx/html
-EXPOSE 80
+# Copy the entire application code to the working directory
+COPY . .
 
-CMD ["nginx", "-g", "daemon off;"]
+# Expose port 3000
+EXPOSE 3000
 
-
-
+# Command to start the application
+CMD ["npm", "start"]
